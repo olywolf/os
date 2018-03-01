@@ -46,6 +46,8 @@ struct cpu;
 #include <machine/thread.h>
 
 
+int spinlockthreadcounter(int, char**);
+
 /* Size of kernel stacks; must be power of 2 */
 #define STACK_SIZE 4096
 

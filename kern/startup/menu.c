@@ -45,6 +45,7 @@
 #include "opt-synchprobs.h"
 #include "opt-sfs.h"
 #include "opt-net.h"
+//#include "prometheus.c"
 
 /*
  * In-kernel menu and command dispatcher.
@@ -446,7 +447,6 @@ cmd_opsmenu(int n, char **a)
 {
 	(void)n;
 	(void)a;
-
 	showmenu("OS/161 operations menu", opsmenu);
 	return 0;
 }
@@ -456,9 +456,11 @@ static const char *testmenu[] = {
 	"[bt]  Bitmap test                   ",
 	"[km1] Kernel malloc test            ",
 	"[km2] kmalloc stress test           ",
+	"[Mc'threadtest] Thread burger      ",
 	"[tt1] Thread test 1                 ",
 	"[tt2] Thread test 2                 ",
 	"[tt3] Thread test 3                 ",
+	"[prometheus] Know the truth       ",
 #if OPT_NET
 	"[net] Network test                  ",
 #endif
@@ -474,6 +476,11 @@ static const char *testmenu[] = {
 	"[fs3] FS write stress       (4)     ",
 	"[fs4] FS write stress 2     (4)     ",
 	"[fs5] FS create stress      (4)     ",
+
+	"[utc] Unsafe Thread Count - Project 1 ",
+	"[ltc] Lock Thread Count - Project 1 ",
+	"[stc] Spinlock Thread Count - Project 1 ",
+	
 	NULL
 };
 
@@ -565,9 +572,11 @@ static struct {
 	{ "bt",		bitmaptest },
 	{ "km1",	malloctest },
 	{ "km2",	mallocstress },
+	{ "prometheus", prometheus }, //My thing
 #if OPT_NET
 	{ "net",	nettest },
 #endif
+	{"Mc'threadtest", threadfun}, //My other thing
 	{ "tt1",	threadtest },
 	{ "tt2",	threadtest2 },
 	{ "tt3",	threadtest3 },
@@ -587,6 +596,11 @@ static struct {
 	{ "fs3",	writestress },
 	{ "fs4",	writestress2 },
 	{ "fs5",	createstress },
+
+	//PROJECT 1 ADDITIONS
+	{ "utc" , unsafethreadcount  },
+	{ "ltc" , lockthreadcount  },
+	{ "stc" , spinlockthreadcounter  },
 
 	{ NULL, NULL }
 };

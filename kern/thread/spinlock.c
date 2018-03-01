@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2009
- *	The President and Fellows of Harvard College.
+ *The President and Fellows of Harvard College.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -35,7 +35,7 @@
 #include <cpu.h>
 #include <spl.h>
 #include <spinlock.h>
-#include <current.h>	/* for curcpu */
+#include <current.h>/* for curcpu */
 
 /*
  * Spinlocks.
@@ -48,8 +48,8 @@
 void
 spinlock_init(struct spinlock *lk)
 {
-	spinlock_data_set(&lk->lk_lock, 0);
-	lk->lk_holder = NULL;
+  spinlock_data_set(&lk->lk_lock, 0);
+  lk->lk_holder = NULL;
 }
 
 /*
@@ -58,8 +58,10 @@ spinlock_init(struct spinlock *lk)
 void
 spinlock_cleanup(struct spinlock *lk)
 {
-	KASSERT(lk->lk_holder == NULL);
-	KASSERT(spinlock_data_get(&lk->lk_lock) == 0);
+  //lk = NULL ;
+  KASSERT(lk->lk_holder == NULL);
+  KASSERT(spinlock_data_get(&lk->lk_lock) == 0);
+  //KASSERT ( spinlock_data_get ( &lk -> lk_lock ) == NULL ) ;
 }
 
 /*
@@ -72,42 +74,42 @@ spinlock_cleanup(struct spinlock *lk)
 void
 spinlock_acquire(struct spinlock *lk)
 {
-	struct cpu *mycpu;
+  struct cpu *mycpu;
 
-	splraise(IPL_NONE, IPL_HIGH);
+  splraise(IPL_NONE, IPL_HIGH);
 
-	/* this must work before curcpu initialization */
-	if (CURCPU_EXISTS()) {
-		mycpu = curcpu->c_self;
-		if (lk->lk_holder == mycpu) {
-			panic("Deadlock on spinlock %p\n", lk);
-		}
-	}
-	else {
-		mycpu = NULL;
-	}
+  /* this must work before curcpu initialization */
+  if (CURCPU_EXISTS()) {
+    mycpu = curcpu->c_self;
+    if (lk->lk_holder == mycpu) {
+      panic("Deadlock on spinlock %p\n", lk);
+    }
+  }
+  else {
+    mycpu = NULL;
+  }
 
-	while (1) {
-		/*
-		 * Do test-test-and-set, that is, read first before
-		 * doing test-and-set, to reduce bus contention.
-		 *
-		 * Test-and-set is a machine-level atomic operation
-		 * that writes 1 into the lock word and returns the
-		 * previous value. If that value was 0, the lock was
-		 * previously unheld and we now own it. If it was 1,
-		 * we don't.
-		 */
-		if (spinlock_data_get(&lk->lk_lock) != 0) {
-			continue;
-		}
-		if (spinlock_data_testandset(&lk->lk_lock) != 0) {
-			continue;
-		}
-		break;
-	}
+  while (1) {
+    /*
+     * Do test-test-and-set, that is, read first before
+     * doing test-and-set, to reduce bus contention.
+     *
+     * Test-and-set is a machine-level atomic operation
+     * that writes 1 into the lock word and returns the
+      * previous value. If that value was 0, the lock was
+      * previously unheld and we now own it. If it was 1,
+       * we don't.
+ */
+if (spinlock_data_get(&lk->lk_lock) != 0) {
+continue;
+}
+if (spinlock_data_testandset(&lk->lk_lock) != 0) {
+continue;
+}
+break;
+}
 
-	lk->lk_holder = mycpu;
+lk->lk_holder = mycpu;
 }
 
 /*
@@ -116,14 +118,14 @@ spinlock_acquire(struct spinlock *lk)
 void
 spinlock_release(struct spinlock *lk)
 {
-	/* this must work before curcpu initialization */
-	if (CURCPU_EXISTS()) {
-		KASSERT(lk->lk_holder == curcpu->c_self);
-	}
+/* this must work before curcpu initialization */
+if (CURCPU_EXISTS()) {
+KASSERT(lk->lk_holder == curcpu->c_self);
+}
 
-	lk->lk_holder = NULL;
-	spinlock_data_set(&lk->lk_lock, 0);
-	spllower(IPL_HIGH, IPL_NONE);
+lk->lk_holder = NULL;
+spinlock_data_set(&lk->lk_lock, 0);
+spllower(IPL_HIGH, IPL_NONE);
 }
 
 /*
@@ -132,10 +134,10 @@ spinlock_release(struct spinlock *lk)
 bool
 spinlock_do_i_hold(struct spinlock *lk)
 {
-	if (!CURCPU_EXISTS()) {
-		return true;
-	}
+if (!CURCPU_EXISTS()) {
+return true;
+}
 
-	/* Assume we can read lk_holder atomically enough for this to work */
-	return (lk->lk_holder == curcpu->c_self);
+/* Assume we can read lk_holder atomically enough for this to work */
+return (lk->lk_holder == curcpu->c_self);
 }

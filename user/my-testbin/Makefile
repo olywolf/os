@@ -4,5 +4,6 @@ TOP=../..
 
 # Just add new directories at the end of the line below.
 SUBDIRS= example 
-
+SUBDIRS = writeConsole
+SUBDIRS = time
 .include "$(TOP)/mk/os161.subdir.mk"

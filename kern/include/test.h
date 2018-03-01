@@ -52,6 +52,8 @@ int arraytest(int, char **);
 int bitmaptest(int, char **);
 int queuetest(int, char **);
 
+int threadfun(int, char **); /*Other thing that took less time to figure out how to implement cause I learned my mistakes from lab 4 :) */
+
 /* thread tests */
 int threadtest(int, char **);
 int threadtest2(int, char **);
@@ -88,6 +90,16 @@ void menu(char *argstr);
 
 /* The main function, called from start.S. */
 void kmain(char *bootstring);
+
+void hello(void); /* An added "Hello" statement that appears above the modified banner */
+int prometheus(int, char **);/*Calling this freaking thing that took me forever to figure out. Adds a [?t] command*/
+void say_goodbye_fn(void);
+void say_hello_fn(void);
+
+//Project 1 Additions
+int unsafethreadcount (int, char**) ;
+int lockthreadcount (int, char**) ;
+int spinlockthreadcount (int, char**) ;
 
 
 #endif /* _TEST_H_ */

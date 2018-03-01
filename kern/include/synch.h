@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2000, 2001, 2002, 2003, 2004, 2005, 2008, 2009
- *	The President and Fellows of Harvard College.
+ *The President and Fellows of Harvard College.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -44,10 +44,10 @@
  * internally.
  */
 struct semaphore {
-        char *sem_name;
-	struct wchan *sem_wchan;
-	struct spinlock sem_lock;
-        volatile int sem_count;
+  char *sem_name;
+  struct wchan *sem_wchan;
+  struct spinlock sem_lock;
+  volatile int sem_count;
 };
 
 struct semaphore *sem_create(const char *name, int initial_count);
@@ -73,9 +73,19 @@ void V(struct semaphore *);
  * (should be) made internally.
  */
 struct lock {
-        char *lk_name;
-        // add what you need here
-        // (don't forget to mark things volatile as needed)
+  char *lk_name;
+
+  // add what you need here
+
+  struct wchan* lk_wchan ;
+  struct spinlock lk_lock ;
+  struct thread volatile* lk_owner ;
+
+  // End of added things.
+
+
+
+  // (don't forget to mark things volatile as needed)
 };
 
 struct lock *lock_create(const char *name);
@@ -87,7 +97,7 @@ void lock_acquire(struct lock *);
  *                   same time.
  *    lock_release - Free the lock. Only the thread holding the lock may do
  *                   this.
- *    lock_do_i_hold - Return true if the current thread holds the lock; 
+   *    lock_do_i_hold - Return true if the current thread holds the lock; 
  *                   false otherwise.
  *
  * These operations must be atomic. You get to write them.
@@ -112,9 +122,21 @@ void lock_destroy(struct lock *);
  */
 
 struct cv {
-        char *cv_name;
-        // add what you need here
-        // (don't forget to mark things volatile as needed)
+  char *cv_name;
+
+
+
+  // add what you need here
+
+  struct wchan* cv_wchan ;
+
+  // End of added things.
+
+
+
+
+
+  // (don't forget to mark things volatile as needed)
 };
 
 struct cv *cv_create(const char *name);

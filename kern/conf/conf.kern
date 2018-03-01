@@ -385,6 +385,9 @@ file      syscall/file_syscalls.c
 
 file      startup/main.c
 file      startup/menu.c
+file 	  startup/hello.c
+#file 	  test/prometheus.c
+file 	  test/threadfun.c
 
 ########################################
 #                                      #
@@ -438,7 +441,15 @@ file		test/tt3.c
 file		test/synchtest.c
 file		test/malloctest.c
 file		test/fstest.c
+file            test/prometheus.c
 optfile net	test/nettest.c
+
+#Project 1 Additons
+file	        test/unsafethreadcount.c
+file		test/lockthreadcount.c
+file	        thread/spinlockthreadcounter.c
+
+
 # UW Mod
 file    test/uw-tests.c
 
